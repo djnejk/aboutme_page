@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -6,13 +7,14 @@ declare(strict_types=1);
  * Usage in template: <?= t('Česky', 'English') ?>
  */
 
-function current_lang(): string {
+function current_lang(): string
+{
   $allowed = ['cs', 'en'];
 
   if (isset($_GET['lang']) && in_array($_GET['lang'], $allowed, true)) {
     $lang = $_GET['lang'];
     setcookie('lang', $lang, [
-      'expires' => time() + 60*60*24*365,
+      'expires' => time() + 60 * 60 * 24 * 365,
       'path' => '/',
       'secure' => isset($_SERVER['HTTPS']),
       'httponly' => false,
@@ -33,27 +35,36 @@ function current_lang(): string {
 
 $lang = current_lang();
 
-function t(string $cs, string $en): string {
+function t(string $cs, string $en): string
+{
   global $lang;
   return $lang === 'en' ? $en : $cs;
 }
 
-function lang_url(string $target): string {
+function lang_url(string $target): string
+{
   $path = strtok($_SERVER['REQUEST_URI'] ?? '/', '?') ?: '/';
   return htmlspecialchars($path . '?lang=' . $target, ENT_QUOTES);
 }
 ?>
 <!doctype html>
 <html lang="<?= $lang === 'en' ? 'en' : 'cs' ?>">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title><?= t('Jiří Januš (Dj Nejk) | djdevs.eu', 'Jiří Januš (Dj Nejk) | djdevs.eu') ?></title>
   <meta name="description" content="<?= t(
-    'Osobní prezentace Jiřího Januše (Dj Nejk) — webové aplikace a prezentace, Minecraft pluginy, projekt Filmy pod Hvězdami, Run For Planet, ovládání MHD panelů a 3D tisk.',
-    'Personal site of Jiří Januš (Dj Nejk) — websites & web apps, Minecraft plugins, Filmy pod Hvězdami, Run For Planet, public transport display control and 3D printing.'
-  ) ?>" />
+                                      'Osobní prezentace Jiřího Januše (Dj Nejk) — webové aplikace a prezentace, Minecraft pluginy, projekt Filmy pod Hvězdami, Run For Planet, ovládání MHD panelů a 3D tisk.',
+                                      'Personal site of Jiří Januš (Dj Nejk) — websites & web apps, Minecraft plugins, Filmy pod Hvězdami, Run For Planet, public transport display control and 3D printing.'
+                                    ) ?>" />
   <meta name="theme-color" content="#05060a" />
+
+  <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="/assets/favicon/site.webmanifest" />
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -61,140 +72,195 @@ function lang_url(string $target): string {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
   <style>
-    :root{
-      --bg0:#000000;
-      --bg1:#070810;
-      --card: rgba(255,255,255,.04);
-      --muted: rgba(255,255,255,.75);
-      --muted2: rgba(255,255,255,.58);
+    :root {
+      --bg0: #000000;
+      --bg1: #070810;
+      --card: rgba(255, 255, 255, .04);
+      --muted: rgba(255, 255, 255, .75);
+      --muted2: rgba(255, 255, 255, .58);
       --accent: #6ea8fe;
-      --accent2:#9b7bff;
-      --border: rgba(255,255,255,.10);
-      --shadow: 0 20px 60px rgba(0,0,0,.50);
+      --accent2: #9b7bff;
+      --border: rgba(255, 255, 255, .10);
+      --shadow: 0 20px 60px rgba(0, 0, 0, .50);
     }
-    body{
+
+    body {
       background:
-        radial-gradient(900px 650px at 12% 12%, rgba(110,168,254,.12), transparent 55%),
-        radial-gradient(900px 650px at 90% 18%, rgba(155,123,255,.10), transparent 55%),
+        radial-gradient(900px 650px at 12% 12%, rgba(110, 168, 254, .12), transparent 55%),
+        radial-gradient(900px 650px at 90% 18%, rgba(155, 123, 255, .10), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
-      color:#fff;
+      color: #fff;
     }
-    .navbar{
+
+    .navbar {
       backdrop-filter: blur(10px);
-      background: rgba(0,0,0,.55);
+      background: rgba(0, 0, 0, .55);
       border-bottom: 1px solid var(--border);
     }
-    .brand-badge{
-      display:inline-flex; align-items:center; gap:.55rem;
-      padding:.35rem .65rem;
-      border:1px solid var(--border);
-      border-radius:999px;
-      background: rgba(255,255,255,.03);
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      padding: .35rem .65rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .03);
     }
-    .hero{ padding-top: 6.25rem; padding-bottom: 2.25rem; }
-    .hero-card{
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border:1px solid var(--border);
+
+    .hero {
+      padding-top: 6.25rem;
+      padding-bottom: 2.25rem;
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
+      border: 1px solid var(--border);
       border-radius: 1.25rem;
       box-shadow: var(--shadow);
     }
-    .pill{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      border-radius:999px;
-      padding:.35rem .65rem;
-      color:var(--muted);
-      font-size:.95rem;
+
+    .pill {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, .03);
+      border-radius: 999px;
+      padding: .35rem .65rem;
+      color: var(--muted);
+      font-size: .95rem;
     }
-    .section-title{ letter-spacing:.3px; }
-    .card-soft{
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
-}
 
-    .muted{ color: var(--muted); }
-    .muted2{ color: var(--muted2); }
-    a{ color:#fff; }
-    a.link-soft{ color: var(--accent); text-decoration: none; }
-    a.link-soft:hover{ text-decoration: underline; }
+    .section-title {
+      letter-spacing: .3px;
+    }
 
-    .tag{
-      display:inline-flex; align-items:center;
-      padding:.25rem .55rem;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      font-size:.85rem;
+    .card-soft {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .muted2 {
+      color: var(--muted2);
+    }
+
+    a {
+      color: #fff;
+    }
+
+    a.link-soft {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a.link-soft:hover {
+      text-decoration: underline;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .25rem .55rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, .03);
+      font-size: .85rem;
       color: var(--muted);
       margin: .2rem .2rem 0 0;
       white-space: nowrap;
     }
-    .btn-accent{
-      background: linear-gradient(90deg, rgba(110,168,254,.95), rgba(155,123,255,.95));
-      border:0;
-    }
-    .btn-accent:hover{ filter: brightness(1.05); }
-    .kbd{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      padding:.05rem .35rem;
-      border-radius:.35rem;
-      border:1px solid var(--border);
-      background: rgba(0,0,0,.35);
-      color: var(--muted);
-      font-size:.9rem;
-    }
-    .hr-soft{ border-color: rgba(255,255,255,.10) !important; }
 
-    .profile-wrap{ display:flex; gap: 1.25rem; align-items:center; flex-wrap:wrap; }
-    .profile-img{
-      width: 112px; height: 112px; border-radius: 18px; object-fit: cover;
+    .btn-accent {
+      background: linear-gradient(90deg, rgba(110, 168, 254, .95), rgba(155, 123, 255, .95));
+      border: 0;
+    }
+
+    .btn-accent:hover {
+      filter: brightness(1.05);
+    }
+
+    .kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      padding: .05rem .35rem;
+      border-radius: .35rem;
       border: 1px solid var(--border);
-      box-shadow: 0 12px 35px rgba(0,0,0,.55);
-      background: rgba(255,255,255,.03);
+      background: rgba(0, 0, 0, .35);
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .hr-soft {
+      border-color: rgba(255, 255, 255, .10) !important;
+    }
+
+    .profile-wrap {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .profile-img {
+      width: 112px;
+      height: 112px;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, .55);
+      background: rgba(255, 255, 255, .03);
     }
 
     /* Gallery */
-    .gallery-item{
-      border:1px solid var(--border);
+    .gallery-item {
+      border: 1px solid var(--border);
       border-radius: .9rem;
-      overflow:hidden;
-      background: rgba(255,255,255,.03);
-      cursor:pointer;
+      overflow: hidden;
+      background: rgba(255, 255, 255, .03);
+      cursor: pointer;
       height: 190px;
       position: relative;
     }
-    .gallery-item:hover{ border-color: rgba(110,168,254,.35); }
-    .gallery-item img{
-      width:100%;
-      height:100%;
-      object-fit: cover;
-      opacity:.92;
-      transform: scale(1.01);
-    }
-    .gallery-badge{
-      position:absolute;
-      left:10px; top:10px;
-      padding:.25rem .55rem;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(0,0,0,.55);
-      color: rgba(255,255,255,.85);
-      font-size:.82rem;
-      backdrop-filter: blur(6px);
-    }
-    .gallery-fallback{
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color: var(--muted2);
-      padding: 1rem;
-      text-align:center;
+
+    .gallery-item:hover {
+      border-color: rgba(110, 168, 254, .35);
     }
 
-    .footer{
-      border-top:1px solid var(--border);
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: .92;
+      transform: scale(1.01);
+    }
+
+    .gallery-badge {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      padding: .25rem .55rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, .55);
+      color: rgba(255, 255, 255, .85);
+      font-size: .82rem;
+      backdrop-filter: blur(6px);
+    }
+
+    .gallery-fallback {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted2);
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .footer {
+      border-top: 1px solid var(--border);
       padding: 2.5rem 0;
       color: var(--muted2);
     }
@@ -226,8 +292,8 @@ function lang_url(string $target): string {
 
           <li class="nav-item ms-lg-2">
             <div class="btn-group" role="group" aria-label="Language switcher">
-              <a class="btn btn-sm btn-outline-light <?= $lang==='cs'?'active':'' ?>" href="<?= lang_url('cs') ?>">CZ</a>
-              <a class="btn btn-sm btn-outline-light <?= $lang==='en'?'active':'' ?>" href="<?= lang_url('en') ?>">EN</a>
+              <a class="btn btn-sm btn-outline-light <?= $lang === 'cs' ? 'active' : '' ?>" href="<?= lang_url('cs') ?>">CZ</a>
+              <a class="btn btn-sm btn-outline-light <?= $lang === 'en' ? 'active' : '' ?>" href="<?= lang_url('en') ?>">EN</a>
             </div>
           </li>
 
@@ -451,65 +517,65 @@ function lang_url(string $target): string {
 
       <div class="row g-4">
         <?php
-          $cards = [
-            [
-              'icon' => 'bi-film',
-              'title' => 'filmypodhvezdami.cz',
-              'text' => [
-                'Filmy pod Hvězdami — letní kino pod širým nebem. Dělám web a věci kolem online prezentace.',
-                'Filmy pod Hvězdami — open-air summer cinema. I work on the website and online presence.',
-              ],
-              'url'  => 'http://filmypodhvezdami.cz/',
-              'badge'=> ['Projekt', 'Project'],
+        $cards = [
+          [
+            'icon' => 'bi-film',
+            'title' => 'filmypodhvezdami.cz',
+            'text' => [
+              'Filmy pod Hvězdami — letní kino pod širým nebem. Dělám web a věci kolem online prezentace.',
+              'Filmy pod Hvězdami — open-air summer cinema. I work on the website and online presence.',
             ],
-            [
-              'icon' => 'bi-tree',
-              'title' => 'runforplanet.cz',
-              'text' => [
-                'Run For Planet — charitativní běhy. Webová prezentace projektu + info pro běžce.',
-                'Run For Planet — charity runs. Website with event info for runners.',
-              ],
-              'url'  => 'https://www.runforplanet.cz/',
-              'badge'=> ['Projekt', 'Project'],
+            'url'  => 'http://filmypodhvezdami.cz/',
+            'badge' => ['Projekt', 'Project'],
+          ],
+          [
+            'icon' => 'bi-tree',
+            'title' => 'runforplanet.cz',
+            'text' => [
+              'Run For Planet — charitativní běhy. Webová prezentace projektu + info pro běžce.',
+              'Run For Planet — charity runs. Website with event info for runners.',
             ],
-            [
-              'icon' => 'bi-ui-checks',
-              'title' => 'dsb.runforplanet.cz',
-              'text' => [
-                'Online registrace na běhy — webová aplikace pro přihlášení (a další funkce podle potřeby).',
-                'Online registration app for runs — web application for sign-up (and more features as needed).',
-              ],
-              'url'  => 'https://dsb.runforplanet.cz/',
-              'badge'=> ['Web app', 'Web app'],
+            'url'  => 'https://www.runforplanet.cz/',
+            'badge' => ['Projekt', 'Project'],
+          ],
+          [
+            'icon' => 'bi-ui-checks',
+            'title' => 'dsb.runforplanet.cz',
+            'text' => [
+              'Online registrace na běhy — webová aplikace pro přihlášení (a další funkce podle potřeby).',
+              'Online registration app for runs — web application for sign-up (and more features as needed).',
             ],
-            [
-              'icon' => 'bi-building',
-              'title' => 'obeclibrice.cz',
-              'text' => [
-                'Obec Libřice — webová prezentace + část funkčnosti jako aplikace.',
-                'Municipality of Libřice — website plus application functionality.',
-              ],
-              'url'  => 'https://obeclibrice.cz/',
-              'badge'=> ['Web', 'Web'],
+            'url'  => 'https://dsb.runforplanet.cz/',
+            'badge' => ['Web app', 'Web app'],
+          ],
+          [
+            'icon' => 'bi-building',
+            'title' => 'obeclibrice.cz',
+            'text' => [
+              'Obec Libřice — webová prezentace + část funkčnosti jako aplikace.',
+              'Municipality of Libřice — website plus application functionality.',
             ],
-          ];
-          foreach ($cards as $c):
+            'url'  => 'https://obeclibrice.cz/',
+            'badge' => ['Web', 'Web'],
+          ],
+        ];
+        foreach ($cards as $c):
         ?>
-        <div class="col-md-6 col-lg-3">
-          <div class="card-soft p-4 h-100">
-            <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
-              <div class="d-flex align-items-center gap-2">
-                <i class="bi <?= htmlspecialchars($c['icon']) ?> fs-4"></i>
-                <div class="fw-semibold"><?= htmlspecialchars($c['title']) ?></div>
+          <div class="col-md-6 col-lg-3">
+            <div class="card-soft p-4 h-100">
+              <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi <?= htmlspecialchars($c['icon']) ?> fs-4"></i>
+                  <div class="fw-semibold"><?= htmlspecialchars($c['title']) ?></div>
+                </div>
+                <span class="tag"><?= t($c['badge'][0], $c['badge'][1]) ?></span>
               </div>
-              <span class="tag"><?= t($c['badge'][0], $c['badge'][1]) ?></span>
+              <p class="muted2 mb-3"><?= t($c['text'][0], $c['text'][1]) ?></p>
+              <a class="link-soft" href="<?= htmlspecialchars($c['url']) ?>" target="_blank" rel="noreferrer">
+                <i class="bi bi-box-arrow-up-right me-1"></i><?= t('Otevřít', 'Open') ?>
+              </a>
             </div>
-            <p class="muted2 mb-3"><?= t($c['text'][0], $c['text'][1]) ?></p>
-            <a class="link-soft" href="<?= htmlspecialchars($c['url']) ?>" target="_blank" rel="noreferrer">
-              <i class="bi bi-box-arrow-up-right me-1"></i><?= t('Otevřít', 'Open') ?>
-            </a>
           </div>
-        </div>
         <?php endforeach; ?>
 
         <div class="col-lg-6">
@@ -520,9 +586,9 @@ function lang_url(string $target): string {
               <span class="tag ms-auto"><?= t('Plugin', 'Plugin') ?></span>
             </div>
             <p class="muted2 mb-2"><?= t(
-              'Vlastní plugin + věci na míru. Ukázka: MySQL Commands (SpigotMC).',
-              'Custom plugins + tailored features. Example: MySQL Commands (SpigotMC).'
-            ) ?></p>
+                                      'Vlastní plugin + věci na míru. Ukázka: MySQL Commands (SpigotMC).',
+                                      'Custom plugins + tailored features. Example: MySQL Commands (SpigotMC).'
+                                    ) ?></p>
             <a class="link-soft" href="https://www.spigotmc.org/resources/mysql-commands.123854/" target="_blank" rel="noreferrer">
               <i class="bi bi-box-arrow-up-right me-1"></i><?= t('Otevřít', 'Open') ?>
             </a>
@@ -537,9 +603,9 @@ function lang_url(string $target): string {
               <span class="tag ms-auto"><?= t('Hardware', 'Hardware') ?></span>
             </div>
             <p class="muted2 mb-0"><?= t(
-              'Vyvíjím vlastní ovladač pro informační panely z MHD — od elektroniky až po software. (Fotky najdeš v galerii.)',
-              'I’m developing my own controller for public transport information displays — from electronics to software. (Photos in gallery.)'
-            ) ?></p>
+                                      'Vyvíjím vlastní ovladač pro informační panely z MHD — od elektroniky až po software. (Fotky najdeš v galerii.)',
+                                      'I’m developing my own controller for public transport information displays — from electronics to software. (Photos in gallery.)'
+                                    ) ?></p>
           </div>
         </div>
 
@@ -551,9 +617,9 @@ function lang_url(string $target): string {
               <span class="tag ms-auto"><?= t('Maker', 'Maker') ?></span>
             </div>
             <p class="muted2 mb-3"><?= t(
-              'Tisknu prototypy i velké projekty. Největší projekt: tisk sochy pro youtubera MenT v životní velikosti (fotky v galerii).',
-              'From prototypes to large builds. Biggest project: a life-size statue print for YouTuber MenT (see gallery).'
-            ) ?></p>
+                                      'Tisknu prototypy i velké projekty. Největší projekt: tisk sochy pro youtubera MenT v životní velikosti (fotky v galerii).',
+                                      'From prototypes to large builds. Biggest project: a life-size statue print for YouTuber MenT (see gallery).'
+                                    ) ?></p>
             <div class="d-flex flex-wrap gap-2">
               <span class="tag">2× Creality Ender S1</span>
               <span class="tag">CR-10 (32-bit mod)</span>
@@ -628,40 +694,40 @@ function lang_url(string $target): string {
 
       <div class="row g-3">
         <?php
-          $gallery = [
-            [ 'file' => 'assets/mhd-panel-1.jpg', 'label' => ['MHD panel', 'Display'], 'caption' => ['MHD ovladač — prototyp', 'Display controller — prototype'] ],
-            [ 'file' => 'assets/mhd-panel-2.jpg', 'label' => ['MHD panel', 'Display'], 'caption' => ['MHD ovladač — detail', 'Display controller — details'] ],
-            [ 'file' => 'assets/3d-ment-1.jpg',   'label' => ['3D tisk', '3D print'], 'caption' => ['Socha — tisk', 'Statue — printing'] ],
-            [ 'file' => 'assets/3d-ment-2.jpg',   'label' => ['3D tisk', '3D print'], 'caption' => ['Socha — hotovo', 'Statue — finished'] ],
-          ];
-          foreach ($gallery as $g):
-            $file = $g['file'];
-            $label = t($g['label'][0], $g['label'][1]);
-            $caption = t($g['caption'][0], $g['caption'][1]);
-            $safeFile = htmlspecialchars($file, ENT_QUOTES);
-            $safeCaption = htmlspecialchars($caption, ENT_QUOTES);
-            $safeLabel = htmlspecialchars($label, ENT_QUOTES);
+        $gallery = [
+          ['file' => 'assets/mhd-panel-1.jpg', 'label' => ['MHD panel', 'Display'], 'caption' => ['MHD ovladač — prototyp', 'Display controller — prototype']],
+          ['file' => 'assets/mhd-panel-2.jpg', 'label' => ['MHD panel', 'Display'], 'caption' => ['MHD ovladač — detail', 'Display controller — details']],
+          ['file' => 'assets/3d-ment-1.jpg',   'label' => ['3D tisk', '3D print'], 'caption' => ['Socha — tisk', 'Statue — printing']],
+          ['file' => 'assets/3d-ment-2.jpg',   'label' => ['3D tisk', '3D print'], 'caption' => ['Socha — hotovo', 'Statue — finished']],
+        ];
+        foreach ($gallery as $g):
+          $file = $g['file'];
+          $label = t($g['label'][0], $g['label'][1]);
+          $caption = t($g['caption'][0], $g['caption'][1]);
+          $safeFile = htmlspecialchars($file, ENT_QUOTES);
+          $safeCaption = htmlspecialchars($caption, ENT_QUOTES);
+          $safeLabel = htmlspecialchars($label, ENT_QUOTES);
         ?>
-        <div class="col-6 col-lg-3">
-          <div class="gallery-item"
-               data-bs-toggle="modal"
-               data-bs-target="#imgModal"
-               data-img="<?= $safeFile ?>"
-               data-caption="<?= $safeCaption ?>">
-            <span class="gallery-badge"><i class="bi bi-image me-1"></i><?= $safeLabel ?></span>
+          <div class="col-6 col-lg-3">
+            <div class="gallery-item"
+              data-bs-toggle="modal"
+              data-bs-target="#imgModal"
+              data-img="<?= $safeFile ?>"
+              data-caption="<?= $safeCaption ?>">
+              <span class="gallery-badge"><i class="bi bi-image me-1"></i><?= $safeLabel ?></span>
 
-            <!-- If image missing, browser will trigger onerror and show fallback -->
-            <img src="<?= $safeFile ?>" alt="<?= $safeLabel ?>"
-                 onerror="this.style.display='none'; this.closest('.gallery-item').querySelector('.gallery-fallback').style.display='flex';">
-            <div class="gallery-fallback" style="display:none;">
-              <div>
-                <i class="bi bi-image fs-3"></i>
-                <div class="mt-2"><?= $safeLabel ?></div>
-                <div class="small muted2 mt-1"><?= t('Chybí soubor', 'Missing file') ?>:<br><span class="kbd"><?= htmlspecialchars(basename($file)) ?></span></div>
+              <!-- If image missing, browser will trigger onerror and show fallback -->
+              <img src="<?= $safeFile ?>" alt="<?= $safeLabel ?>"
+                onerror="this.style.display='none'; this.closest('.gallery-item').querySelector('.gallery-fallback').style.display='flex';">
+              <div class="gallery-fallback" style="display:none;">
+                <div>
+                  <i class="bi bi-image fs-3"></i>
+                  <div class="mt-2"><?= $safeLabel ?></div>
+                  <div class="small muted2 mt-1"><?= t('Chybí soubor', 'Missing file') ?>:<br><span class="kbd"><?= htmlspecialchars(basename($file)) ?></span></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         <?php endforeach; ?>
       </div>
 
@@ -741,9 +807,9 @@ function lang_url(string $target): string {
 
             <div class="d-flex flex-wrap gap-2">
               <a class="btn btn-accent text-dark fw-semibold" href="mailto:jiri.janus@djdevs.eu?subject=<?= rawurlencode('Poptávka z djdevs.eu') ?>&body=<?= rawurlencode(t(
-                "Ahoj Jiří,\n\nChci: \nTermín: \nOdkaz/inspirace: \nPoznámka: \n\nDíky!",
-                "Hi Jiří,\n\nI need: \nDeadline: \nLinks/inspiration: \nNotes: \n\nThanks!"
-              )) ?>">
+                                                                                                                                                            "Ahoj Jiří,\n\nChci: \nTermín: \nOdkaz/inspirace: \nPoznámka: \n\nDíky!",
+                                                                                                                                                            "Hi Jiří,\n\nI need: \nDeadline: \nLinks/inspiration: \nNotes: \n\nThanks!"
+                                                                                                                                                          )) ?>">
                 <i class="bi bi-send"></i><span class="ms-2"><?= t('Napsat e-mail', 'Send email') ?></span>
               </a>
 
@@ -818,7 +884,7 @@ function lang_url(string $target): string {
       tools: ["VS Code", "Visual Studio", "IntelliJ IDEA", "Git (basic)", "Synology", "Adobe"]
     };
 
-    function renderTags(containerId, arr){
+    function renderTags(containerId, arr) {
       const el = document.getElementById(containerId);
       if (!el) return;
       el.innerHTML = arr.map(x => `<span class="tag">${x}</span>`).join("");
@@ -829,19 +895,21 @@ function lang_url(string $target): string {
     renderTags("tagsTools", tagSets.tools);
 
     // Smooth scroll (offset for fixed navbar)
-    $('a[href^="#"]').on("click", function(e){
+    $('a[href^="#"]').on("click", function(e) {
       const href = this.getAttribute("href");
       if (!href || href === "#") return;
       const target = $(href);
-      if (target.length){
+      if (target.length) {
         e.preventDefault();
         const top = target.offset().top - 78;
-        $("html, body").animate({ scrollTop: top }, 420);
+        $("html, body").animate({
+          scrollTop: top
+        }, 420);
       }
     });
 
     // Gallery modal
-    $("#imgModal").on("show.bs.modal", function (e) {
+    $("#imgModal").on("show.bs.modal", function(e) {
       const trigger = e.relatedTarget;
       const img = trigger.getAttribute("data-img");
       const caption = trigger.getAttribute("data-caption") || "";
@@ -850,4 +918,5 @@ function lang_url(string $target): string {
     });
   </script>
 </body>
+
 </html>
