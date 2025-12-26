@@ -829,8 +829,8 @@ function lang_url(string $target): string
 
   <footer class="footer">
     <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
-      <div>© <span id="year"></span> djdevs.eu</div>
-      <div class="muted2"><?= t('Děláno s', 'Made with') ?> <i class="bi bi-heart-fill"></i> <?= t('Bootstrap + jQuery', 'Bootstrap + jQuery') ?></div>
+      <p class="text-center">© <?php echo '2025-' . date('Y'); ?> DjDevs.eu - <?= t('S láskou ❤️ vytvořilo', 'Made with love ❤️ by') ?> <a target="_blank" href="https://djdevs.eu" rel="noopener" style="text-decoration: none; color: #fff;">DjDevs.eu</a></p>
+      <p><?php require('/version.txt') ?></p>
     </div>
   </footer>
 
