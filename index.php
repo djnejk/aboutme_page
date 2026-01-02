@@ -214,50 +214,55 @@ function lang_url(string $target): string
     }
 
     /* Gallery */
-    .gallery-item {
-      border: 1px solid var(--border);
-      border-radius: .9rem;
-      overflow: hidden;
-      background: rgba(255, 255, 255, .03);
-      cursor: pointer;
-      height: 190px;
-      position: relative;
-    }
+.gallery-item {
+  border: 1px solid var(--border);
+  border-radius: .9rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .03);
+  cursor: pointer;
+  position: relative;
 
-    .gallery-item:hover {
-      border-color: rgba(110, 168, 254, .35);
-    }
+  /* odstraněno: height: 190px; */
+}
 
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: .92;
-      transform: scale(1.01);
-    }
+.gallery-item:hover {
+  border-color: rgba(110, 168, 254, .35);
+}
 
-    .gallery-badge {
-      position: absolute;
-      left: 10px;
-      top: 10px;
-      padding: .25rem .55rem;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(0, 0, 0, .55);
-      color: rgba(255, 255, 255, .85);
-      font-size: .82rem;
-      backdrop-filter: blur(6px);
-    }
+.gallery-item img {
+  width: 100%;
+  height: auto;          /* ✅ výška podle obrázku */
+  display: block;        /* ✅ odstraní mezery pod img */
+  object-fit: contain;   /* ✅ zobrazí celý obrázek (bez ořezu) */
 
-    .gallery-fallback {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted2);
-      padding: 1rem;
-      text-align: center;
-    }
+  opacity: .92;
+  transform: scale(1.01);
+}
+
+/* Badge necháme */
+.gallery-badge {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  padding: .25rem .55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, .55);
+  color: rgba(255, 255, 255, .85);
+  font-size: .82rem;
+  backdrop-filter: blur(6px);
+}
+
+/* Fallback bez height:100%, protože už nemáme pevnou výšku */
+.gallery-fallback {
+  aspect-ratio: 4 / 3;  /* ✅ nějaký rozumný default box */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted2);
+  padding: 1rem;
+  text-align: center;
+}
 
     .footer {
       border-top: 1px solid var(--border);
@@ -358,8 +363,12 @@ function lang_url(string $target): string
             <div class="mt-4 muted2">
               <span class="kbd">PHP</span> <span class="mx-1">+</span>
               <span class="kbd">JS</span> <span class="mx-1">+</span>
+              <span class="kbd">jQuery</span> <span class="mx-1">+</span>
               <span class="kbd">MySQL</span> <span class="mx-1">+</span>
-              <span class="kbd">Bootstrap</span>
+              <span class="kbd">Bootstrap</span> <span class="mx-1">+</span>
+              <span class="kbd">Java</span> <span class="mx-1">+</span>
+              <span class="kbd">C++</span> <span class="mx-1">+</span>
+              <span class="kbd">C#</span> 
             </div>
           </div>
         </div>
@@ -397,7 +406,7 @@ function lang_url(string $target): string
                 <div class="fs-4"><i class="bi bi-printer"></i></div>
                 <div>
                   <div class="fw-semibold"><?= t('3D tisk', '3D printing') ?></div>
-                  <div class="muted2"><?= t('Prototypy i velké projekty (např. socha 1:1).', 'From prototypes to large builds (e.g., 1:1 statue).') ?></div>
+                  <div class="muted2"><?= t('Prototypy i velké projekty.', 'From prototypes to large builds.') ?></div>
                 </div>
               </div>
 
@@ -412,9 +421,7 @@ function lang_url(string $target): string
                 </a>
               </div>
 
-              <div class="muted2 small">
-                <?= t('Tip: Klikni na projekty dole — je tam web i registrace pro běhy.', 'Tip: Check the projects below — there’s a website + registration app.') ?>
-              </div>
+
             </div>
           </div>
         </div>
@@ -486,10 +493,39 @@ function lang_url(string $target): string
           <div class="card-soft p-4 p-md-5 mb-4">
             <h3 class="h5 fw-semibold mb-3"><?= t('Rychlá fakta', 'Quick facts') ?></h3>
             <ul class="list-unstyled mb-0 muted">
-              <li class="mb-2"><i class="bi bi-person-badge me-2"></i><?= t('Věk: ', 'Age: ') ?><span id="age2"></span></li>
-              <li class="mb-2"><i class="bi bi-geo me-2"></i><?= t('Královehradecký kraj (CZ).', 'Hradec Králové Region (CZ).') ?></li>
-              <li class="mb-2"><i class="bi bi-mortarboard me-2"></i><?= t('SPŠ/SOŠ/SOU Hradec Králové — elektrotechnika.', 'Technical high school — Electrical engineering (HK).') ?></li>
-              <li class="mb-0"><i class="bi bi-lightning me-2"></i><?= t('Focus: web apps, projekty, pluginy, hardware.', 'Focus: web apps, projects, plugins, hardware.') ?></li>
+              <li class="mb-2">
+                <i class="bi bi-person-badge me-2"></i>
+                <?= t('Věk: ', 'Age: ') ?><span id="age2"></span>
+              </li>
+
+              <li class="mb-2">
+                <i class="bi bi-geo me-2"></i>
+                <?= t('Královehradecký kraj (CZ).', 'Hradec Králové Region (CZ).') ?>
+              </li>
+
+              <li class="mb-2">
+                <i class="bi bi-mortarboard me-2"></i>
+                <?= t(
+                  'Nyní: Univerzita Pardubice, Fakulta elektrotechniky a informatiky — Webové technologie.',
+                  'Now: University of Pardubice, Faculty of Electrical Engineering and Informatics — Web Technologies.'
+                ) ?>
+              </li>
+
+              <li class="mb-2">
+                <i class="bi bi-mortarboard me-2"></i>
+                <?= t(
+                  'Absolvováno: SPŠ/SOŠ/SOU Hradec Králové — elektrotechnika.',
+                  'Completed: Technical high school — Electrical engineering.'
+                ) ?>
+              </li>
+
+              <li class="mb-0">
+                <i class="bi bi-lightning me-2"></i>
+                <?= t(
+                  'Focus: web apps, projekty, pluginy, hardware.',
+                  'Focus: web apps, projects, plugins, hardware.'
+                ) ?>
+              </li>
             </ul>
           </div>
 
@@ -623,7 +659,6 @@ function lang_url(string $target): string
             <div class="d-flex flex-wrap gap-2">
               <span class="tag">2× Creality Ender S1</span>
               <span class="tag">CR-10 (32-bit mod)</span>
-              <span class="tag"><?= t('Socha 1:1', '1:1 statue') ?></span>
             </div>
           </div>
         </div>
@@ -695,10 +730,11 @@ function lang_url(string $target): string
       <div class="row g-3">
         <?php
         $gallery = [
-          ['file' => 'assets/mhd-panel-1.jpg', 'label' => ['MHD panel', 'Display'], 'caption' => ['MHD ovladač — prototyp', 'Display controller — prototype']],
-          ['file' => 'assets/mhd-panel-2.jpg', 'label' => ['MHD panel', 'Display'], 'caption' => ['MHD ovladač — detail', 'Display controller — details']],
-          ['file' => 'assets/3d-ment-1.jpg',   'label' => ['3D tisk', '3D print'], 'caption' => ['Socha — tisk', 'Statue — printing']],
-          ['file' => 'assets/3d-ment-2.jpg',   'label' => ['3D tisk', '3D print'], 'caption' => ['Socha — hotovo', 'Statue — finished']],
+          ['file' => 'assets/photos/panel_1.jpg', 'label' => ['MHD panel', 'Display'], 'caption' => ['Zkušebna', 'Zkušebna']],
+          ['file' => 'assets/photos/panel_2.jpg', 'label' => ['MHD panel', 'Display'], 'caption' => ['MHD ovladač — detail', 'Display controller — details']],
+          ['file' => 'assets/photos/panel_3.jpg', 'label' => ['MHD panel', 'Display'], 'caption' => ['MHD panel ve škole', 'Display']],
+          ['file' => 'assets/photos/ment_1.jpg',   'label' => ['3D tisk', '3D print'], 'caption' => ['Socha — tisk', 'Statue — printing']],
+          ['file' => 'assets/photos/ment_2.png',   'label' => ['3D tisk', '3D print'], 'caption' => ['Socha — hotovo', 'Statue — finished']],
         ];
         foreach ($gallery as $g):
           $file = $g['file'];
@@ -731,12 +767,7 @@ function lang_url(string $target): string
         <?php endforeach; ?>
       </div>
 
-      <div class="mt-3 muted2">
-        <?= t(
-          'Tip: Profilovku dej jako assets/profile.jpg (ideálně čtverec, min. 600×600).',
-          'Tip: Put your profile photo as assets/profile.jpg (square recommended, min 600×600).'
-        ) ?>
-      </div>
+
     </div>
   </section>
 
@@ -829,8 +860,13 @@ function lang_url(string $target): string
 
   <footer class="footer">
     <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
-      <p class="text-center">© <?php echo '2025-' . date('Y'); ?> DjDevs.eu - <?= t('S láskou ❤️ vytvořilo', 'Made with love ❤️ by') ?> <a target="_blank" href="https://djdevs.eu" rel="noopener" style="text-decoration: none; color: #fff;">DjDevs.eu</a></p>
-      <p><?php require('/version.txt') ?></p>
+      <p class="text-center">© <?php echo '2025-' . date('Y'); ?> <?= t('S láskou ❤️ vytvořilo', 'Made with love ❤️ by') ?> <a target="_blank" href="https://djdevs.eu" rel="noopener" style="text-decoration: none; color: #fff;">DjDevs.eu</a></p>
+      <p><?php
+          $vfile = __DIR__ . '/version.txt';
+          if (is_file($vfile)) {
+            echo htmlspecialchars(trim((string) file_get_contents($vfile)), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+          }
+          ?></p>
     </div>
   </footer>
 
@@ -845,12 +881,7 @@ function lang_url(string $target): string
         <div class="modal-body pt-0">
           <img id="imgModalEl" src="" alt="" class="img-fluid rounded" style="border:1px solid var(--border);">
           <div class="muted2 mt-3" id="imgModalCaption"></div>
-          <div class="muted2 mt-2">
-            <?= t(
-              'Tip: Pokud se obrázek nenačte, nahraj ho do složky assets a zkontroluj název souboru.',
-              'Tip: If the image doesn’t load, upload it to the assets folder and verify the filename.'
-            ) ?>
-          </div>
+
         </div>
       </div>
     </div>
@@ -875,12 +906,13 @@ function lang_url(string $target): string
     const age = calculateAge(DOB);
     document.getElementById("age").textContent = age;
     document.getElementById("age2").textContent = age;
-    document.getElementById("year").textContent = new Date().getFullYear();
+    const yearEl = document.getElementById("year");
+    if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
     // Skills tags (more "meaningful" grouping)
     const tagSets = {
       daily: ["HTML", "CSS", "JavaScript", "PHP", "MySQL", "Bootstrap", "jQuery", "REST/API"],
-      also: ["Java", "C++", "C#", "Linux", "Hardware tinkering"],
+      also: ["Java", "C++", "C#", "Linux"],
       tools: ["VS Code", "Visual Studio", "IntelliJ IDEA", "Git (basic)", "Synology", "Adobe"]
     };
 
